@@ -8,6 +8,10 @@ import Details from './pages/details/Details';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Overview from './pages/dashboard/user/Overview';
+import AgentOverview from './pages/dashboard/agent/AgentOverview';
+import AdminOverview from './pages/dashboard/admin/AdminOverview';
+import AgentListings from './pages/dashboard/agent/AgentListings';
+import AdminUsers from './pages/dashboard/admin/AdminUsers';
 import AddProperty from './pages/dashboard/agent/AddProperty';
 import Contact from './pages/Contact';
 import About from './pages/About';
@@ -37,17 +41,25 @@ export default function App() {
         {/* Dashboard Pages */}
         <Route path="/dashboard" element={<DashboardLayout />}>
            <Route index element={<Overview />} />
+           <Route path="agent" element={<AgentOverview />} />
+           <Route path="admin" element={<AdminOverview />} />
+           
            <Route path="saved" element={<Placeholder name="Saved Properties" />} />
            <Route path="messages" element={<Placeholder name="Messages" />} />
            <Route path="history" element={<Placeholder name="View History" />} />
            <Route path="settings" element={<Placeholder name="Settings" />} />
            
            {/* Agent Routes */}
-           <Route path="agent/listings" element={<Placeholder name="Agent Listings" />} />
+           <Route path="agent/listings" element={<AgentListings />} />
            <Route path="agent/add" element={<AddProperty />} />
+           <Route path="agent/leads" element={<Placeholder name="Manage Leads" />} />
+           <Route path="agent/analytics" element={<Placeholder name="Analytics" />} />
            
            {/* Admin Routes */}
-           <Route path="admin/users" element={<Placeholder name="Admin Users" />} />
+           <Route path="admin/users" element={<AdminUsers />} />
+           <Route path="admin/properties" element={<Placeholder name="Admin Properties" />} />
+           <Route path="admin/reports" element={<Placeholder name="Admin Reports" />} />
+           <Route path="admin/subs" element={<Placeholder name="Subscriptions" />} />
         </Route>
       </Routes>
     </BrowserRouter>

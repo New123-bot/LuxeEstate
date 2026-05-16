@@ -39,9 +39,25 @@ const DASHBOARD_NAV: NavItem[] = [
 export function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
-  const userRole = 'user'; // Mocking user role for now
+  const [userRole, setUserRole] = useState<'user' | 'agent' | 'admin'>('user');
 
-  const filteredNav = DASHBOARD_NAV.filter(item => item.role.includes(userRole));
+  const navWithRoleUpdates = DASHBOARD_NAV.map(item => {
+    if (item.id === 'overview') {
+      const path = userRole === 'user' ? '/dashboard' : `/dashboard/${userRole}`;
+      return { ...item, path };
+    }
+    return item;
+  });
+
+  const filteredNav = navWithRoleUpdates.filter(item => item.role.includes(userRole));
+
+  const roleInfo = {
+    user: { name: 'David Miller', label: 'Premium Member', img: 'https://i.pravatar.cc/150?u=user123' },
+    agent: { name: 'Sarah Montgomery', label: 'Elite Agent', img: 'https://i.pravatar.cc/150?u=sarah' },
+    admin: { name: 'Admin Console', label: 'Super Admin', img: 'https://i.pravatar.cc/150?u=admin' }
+  };
+
+  const currentUser = roleInfo[userRole];
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex transition-colors duration-300 pt-20">
@@ -59,6 +75,22 @@ export function DashboardLayout() {
                  {isSidebarOpen && <span className="text-xl font-black dark:text-white tracking-tight">LuxeEstate</span>}
               </Link>
            </div>
+
+           {/* Role Switcher (For Demo Purposes) */}
+           {isSidebarOpen && (
+              <div className="p-4 border-b border-zinc-100 dark:border-zinc-800">
+                 <label className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-2 block px-2">Current View Mode</label>
+                 <select 
+                   value={userRole}
+                   onChange={(e) => setUserRole(e.target.value as any)}
+                   className="w-full bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2 text-xs font-bold focus:ring-2 focus:ring-indigo-500/20 outline-none cursor-pointer"
+                 >
+                    <option value="user">User View</option>
+                    <option value="agent">Agent View</option>
+                    <option value="admin">Admin View</option>
+                 </select>
+              </div>
+           )}
 
            {/* Nav Links */}
            <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
@@ -86,10 +118,10 @@ export function DashboardLayout() {
            <div className="p-4 border-t border-zinc-100 dark:border-zinc-800">
               {isSidebarOpen && (
                  <div className="mb-4 p-4 bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl flex items-center gap-3">
-                    <img src="https://i.pravatar.cc/150?u=user123" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" referrerPolicy="no-referrer" />
+                    <img src={currentUser.img} className="w-10 h-10 rounded-full border-2 border-white shadow-sm" referrerPolicy="no-referrer" />
                     <div className="flex-1 overflow-hidden">
-                       <p className="text-sm font-black dark:text-white truncate">David Miller</p>
-                       <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Premium Member</p>
+                       <p className="text-sm font-black dark:text-white truncate">{currentUser.name}</p>
+                       <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">{currentUser.label}</p>
                     </div>
                  </div>
               )}
@@ -135,8 +167,8 @@ export function DashboardLayout() {
                <div className="h-8 w-px bg-zinc-100 dark:bg-zinc-800 mx-1" />
                
                <button className="flex items-center gap-2 p-1 pr-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-all">
-                  <img src="https://i.pravatar.cc/150?u=user123" className="w-8 h-8 rounded-full border border-white shadow-sm" referrerPolicy="no-referrer" />
-                  <span className="hidden md:block text-sm font-bold dark:text-white">David Miller</span>
+                  <img src={currentUser.img} className="w-8 h-8 rounded-full border border-white shadow-sm" referrerPolicy="no-referrer" />
+                  <span className="hidden md:block text-sm font-bold dark:text-white">{currentUser.name}</span>
                </button>
             </div>
          </header>
