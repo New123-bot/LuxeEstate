@@ -1,0 +1,13 @@
+{
+  "name": "LuxeEstate",
+  "description": "A premium, enterprise-grade real estate platform with advanced filtering, property management dashboards, and elegant property listings.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "Real Estate",
+    "Admin Dashboard",
+    "Agent Dashboard",
+    "Property Search"
+  ]
+}
