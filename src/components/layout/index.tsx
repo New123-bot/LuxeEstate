@@ -19,10 +19,27 @@ const NAV_LINKS = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
   const location = useLocation();
 
   const isDashboard = location.pathname.startsWith('/dashboard');
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDarkMode]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -132,13 +149,21 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="flex items-center justify-between mt-4">
-                <Link 
-                  to="/login" 
-                  className="text-zinc-600 dark:text-zinc-400 font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Login
-                </Link>
+                <div className="flex items-center gap-4">
+                  <Link 
+                    to="/login" 
+                    className="text-zinc-600 dark:text-zinc-400 font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Login
+                  </Link>
+                  <button 
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className="p-2 rounded-full bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                  >
+                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                  </button>
+                </div>
                 <Link 
                   to="/register" 
                   className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-bold"
